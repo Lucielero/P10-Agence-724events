@@ -137,16 +137,19 @@ footer {
   .col {
     margin: 0;
     padding: 32px;
-
     &.contact {
       padding-left: 64px;
-      div {
-        padding-top: 16px;
-      }
       address {
         padding-top: 8px;
       }
-
+      a {
+        padding-top: 16px;
+        text-decoration: none;
+        color: black;
+      }
+      div {
+        padding-top: 16px;
+      }
       svg {
         margin-right: 8px;
       }

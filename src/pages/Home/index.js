@@ -127,8 +127,8 @@ const Page = () => {
       <div className="col contact">
         <h3>Contactez-nous</h3>
         <address>45 avenue de la République, 75000 Paris</address>
-        <div>01 23 45 67 89</div>
-        <div>contact@724events.com</div>
+        <a href="tel:0123456789">01 23 45 67 89</a>
+        <a href="mailto:contact@724events.com">contact@724events.com</a>
         <div>
           <a href="#twitch">
             <Icon name="twitch" />
