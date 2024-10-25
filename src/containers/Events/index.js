@@ -13,25 +13,27 @@ const EventList = () => {
   const { data, error } = useData();
   const [type, setType] = useState();
   const [currentPage, setCurrentPage] = useState(1);
+
+  const typeList = new Set(data?.events.map((event) => event.type));   // détermine les types d'événements
+
+  // filtrer les événements en fonction du type sélectionné
   const filteredEvents = (
     (!type
-      ? data?.events
-      : data?.events) || []
-  ).filter((event, index) => {
-    if (
-      (currentPage - 1) * PER_PAGE <= index &&
-      PER_PAGE * currentPage > index
-    ) {
-      return true;
-    }
-    return false;
-  });
+      ? data?.events // si aucun type sélectionné, sélection de tous les événements
+      : data?.events.filter((event) => event.type === type )) || [] // filtre par type
+  );
+  
+  const totalEvents = data?.events.filter((event) => !type || event.type === type).length || 0; // calcule le nbre total d'événements filtrés
+  const pageNumber = Math.ceil(totalEvents / PER_PAGE); // calcule le nbre total de pages 
+
+  const paginatedEvents = filteredEvents.slice((currentPage - 1) * PER_PAGE, currentPage * PER_PAGE);
+
+  // changer le type d'événement
   const changeType = (evtType) => {
-    setCurrentPage(1);
-    setType(evtType);
+    setCurrentPage(1); // réinitaliser la pagination à la 1ère page
+    setType(evtType);  // màj du type d'événement
   };
-  const pageNumber = Math.floor((filteredEvents?.length || 0) / PER_PAGE) + 1;
-  const typeList = new Set(data?.events.map((event) => event.type));
+
   return (
     <>
       {error && <div>An error occured</div>}
@@ -45,7 +47,7 @@ const EventList = () => {
             onChange={(value) => (value ? changeType(value) : changeType(null))}
           />
           <div id="events" className="ListContainer">
-            {filteredEvents.map((event) => (
+            {paginatedEvents.map((event) => (
               <Modal key={event.id} Content={<ModalEvent event={event} />}>
                 {({ setIsOpened }) => (
                   <EventCard
@@ -59,14 +61,25 @@ const EventList = () => {
               </Modal>
             ))}
           </div>
-          <div className="Pagination">
-            {[...Array(pageNumber || 0)].map((_, n) => (
+
+          {/* Affichage de la pagination seulement si le nbre d'événements est supérieur à PER_PAGE  */}
+          {pageNumber > 1 && (
+            <div className="Pagination">
+            {Array.from({ length: pageNumber }, (_, index) => (
               // eslint-disable-next-line react/no-array-index-key
-              <a key={n} href="#events" onClick={() => setCurrentPage(n + 1)}>
-                {n + 1}
+              <a 
+                key={index + 1}
+                href="#events"
+                onClick={(event) => {
+                  event.preventDefault();
+                  setCurrentPage(index + 1);
+                }}
+              >
+                {index + 1}
               </a>
             ))}
           </div>
+          )}
         </>
       )}
     </>
