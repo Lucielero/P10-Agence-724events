@@ -41,11 +41,12 @@ const Slider = () => {
         <div className="SlideCard__pagination">
           {byDateDesc.map((_, radioIdx) => (
             <input
-              key={`${byDateDesc[radioIdx].id}`} // changement attribution des clés
+              readOnly
+              key={`${byDateDesc[radioIdx].id}`} // changement attribution des clés à modifier comment avant
               type="radio"
               name="radio-button"
               checked={index === radioIdx}
-              onChange={() => setIndex(radioIdx)} // changer la slide au clic des bullet points
+              onChange={() => setIndex(radioIdx)} 
             />
           ))}
         </div>
