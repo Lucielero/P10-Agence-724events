@@ -21,7 +21,7 @@ const Slider = () => {
     <div className="SlideCardList">
       {byDateDesc?.map((event, idx) => (
         <div
-          key={event.title}
+          key={event.id || event.title} // assure une clé unique pour chaque élément
           className={`SlideCard SlideCard--${
             index === idx ? "display" : "hide"
           }`}
@@ -42,8 +42,7 @@ const Slider = () => {
           {byDateDesc.map((_, radioIdx) => (
             <input
               readOnly
-              key={`${byDateDesc[radioIdx].id}`} // changement attribution des clés à modifier comment avant
-              type="radio"
+              key={byDateDesc[radioIdx].id || `radio-${Math.random().toString(36).substr(2, 9)}`} // Clé unique pour la pagination
               name="radio-button"
               checked={index === radioIdx}
               onChange={() => setIndex(radioIdx)} 
